@@ -47,7 +47,7 @@ public class EventControllerTests {
                 .location("강남역 D2 스타트업 팩토리")
                 .build();
 
-        mockMvc.perform(post("/api/events/")
+        mockMvc.perform(post("/api/events")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(event)))
@@ -81,7 +81,7 @@ public class EventControllerTests {
                 .eventStatus(EventStatus.PUBLISHED)
                 .build();
 
-        mockMvc.perform(post("/api/events/")
+        mockMvc.perform(post("/api/events")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .accept(MediaTypes.HAL_JSON)
                     .content(objectMapper.writeValueAsString(event)))
@@ -94,7 +94,7 @@ public class EventControllerTests {
     public void createEvent_Bad_Request_Empty_Input() throws Exception {
         EventDto eventDto = EventDto.builder().build();
 
-        mockMvc.perform(post("/api/events/")
+        mockMvc.perform(post("/api/events")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(objectMapper.writeValueAsString(eventDto)))
                 .andExpect(status().isBadRequest());
@@ -116,10 +116,14 @@ public class EventControllerTests {
                 .location("강남역 D2 스타트업 팩토리")
                 .build();
 
-        mockMvc.perform(post("/api/events/")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(eventDto)))
-                .andExpect(status().isBadRequest());
+        mockMvc.perform(post("/api/events")
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(objectMapper.writeValueAsString(eventDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$[0].objectName").exists())
+                .andExpect(jsonPath("$[0].defaultMessage").exists())
+                .andExpect(jsonPath("$[0].code").exists())
+        ;
     }
-
 }
