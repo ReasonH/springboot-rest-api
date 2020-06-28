@@ -31,4 +31,9 @@ public class Event {
     private boolean free;
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT; // 기본적으로 DRAFT로 생성
+
+    public void update() {
+        this.free = this.basePrice == 0 && this.maxPrice == 0;
+        this.offline =  this.location != null && !this.location.isBlank();
+    }
 }
