@@ -49,6 +49,7 @@ public class EventController {
         WebMvcLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(newEvent.getId());
         URI createdUri = selfLinkBuilder.toUri();
         EntityModel<Event> eventResource = EventResource.getEventResource(event);
+        // link를 type safe하게 만들 수 있음
         eventResource.add(linkTo(EventController.class).withRel("query-events"));
         eventResource.add(selfLinkBuilder.withRel("update-event"));
         return ResponseEntity.created(createdUri).body(eventResource);
