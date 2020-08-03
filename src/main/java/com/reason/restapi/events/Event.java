@@ -1,5 +1,6 @@
 package com.reason.restapi.events;
 
+import com.reason.restapi.accounts.Account;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,6 +32,8 @@ public class Event {
     private boolean free;
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT; // 기본적으로 DRAFT로 생성
+    @ManyToOne
+    private Account manager;
 
     public void update() {
         this.free = this.basePrice == 0 && this.maxPrice == 0;
