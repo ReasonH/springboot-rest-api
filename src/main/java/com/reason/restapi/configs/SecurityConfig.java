@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -59,4 +60,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .mvcMatchers("/docs/index.html").anonymous()
 //                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).anonymous();
 //    }
+
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .anonymous() // 익명 사용자 허용
+                .and()
+                .formLogin() // form 인증 사용
+                .and()
+                .authorizeRequests()
+                .mvcMatchers(HttpMethod.GET, "/api/**").authenticated() // 다음 api 요청은 익명허용
+                .anyRequest().authenticated(); // 나머지는 인증 필요
+    }
 }
