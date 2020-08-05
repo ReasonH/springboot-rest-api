@@ -39,18 +39,20 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<?> createEvent(@RequestBody @Valid EventDto eventDto, Errors errors) {
-        if (errors.hasErrors()){
+        if (errors.hasErrors()) {
             return badRequest(errors);
         }
 
         eventValidator.validate(eventDto, errors);
-        if (errors.hasErrors()){
+        if (errors.hasErrors()) {
             return badRequest(errors);
         }
 
         Event event = modelMapper.map(eventDto, Event.class);
-        event.update();
+        event.update(); // 비즈니스 로직에 따라 field 값 보충
         Event newEvent = this.eventRepository.save(event);
+
+        // response 생성
         WebMvcLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(newEvent.getId());
         URI createdUri = selfLinkBuilder.toUri();
         EntityModel<Event> eventResource = EventResource.getEventResource(event);
