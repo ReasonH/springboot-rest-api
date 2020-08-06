@@ -5,10 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -37,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    // 인증 매니저 설정
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(accountService)
@@ -51,26 +50,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().mvcMatchers("/docs/index.html");
         // PathRequest를 사용하면 스프링 정적 요소 위치에 대해 한번에 처리가능
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-    }
-
-//    // 스프링 시큐리티 내에서 필터 처리
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .mvcMatchers("/docs/index.html").anonymous()
-//                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).anonymous();
-//    }
-
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .anonymous() // 익명 사용자 허용
-                .and()
-                .formLogin() // form 인증 사용
-                .and()
-                .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/api/**").authenticated() // 다음 api 요청은 익명허용
-                .anyRequest().authenticated(); // 나머지는 인증 필요
     }
 }
