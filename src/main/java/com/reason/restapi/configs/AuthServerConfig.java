@@ -27,6 +27,9 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     TokenStore tokenStore;
 
+    @Autowired
+    AppProperties appProperties;
+
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security.passwordEncoder(passwordEncoder); // client의 secret 확인에 사용
@@ -37,10 +40,10 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         // 클라이언트 (서드파티 어플리케이션) 관리를 어떻게할것인가에 대한 정의
         // 클라이언트의 id, pw, scope, grant type및 토큰 만료 시간을 설정한다.
         clients.inMemory()
-                .withClient("myApp")
+                .withClient(appProperties.getClientId())
                 .authorizedGrantTypes("password", "refresh_token")
                 .scopes("read", "write")
-                .secret(this.passwordEncoder.encode("pass"))
+                .secret(this.passwordEncoder.encode(appProperties.getClientSecret()))
                 .accessTokenValiditySeconds(10*60)
                 .refreshTokenValiditySeconds(6*10*60);
     }
