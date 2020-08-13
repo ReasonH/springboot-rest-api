@@ -33,12 +33,6 @@ public class AccountService implements UserDetailsService {
         Account account = accountRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
         // 도메인을 Spring Security가 정의해놓은 인터페이스로 변환하는 일을 한다.
-        return new User(account.getEmail(), account.getPassword(), authorities(account.getRoles()));
-    }
-
-    private Collection<? extends GrantedAuthority> authorities(Set<AccountRole> roles) {
-        return roles.stream().map(r ->
-            new SimpleGrantedAuthority("ROLE_" + r.name())
-        ).collect(Collectors.toSet());
+        return new AccountAdapter(account);
     }
 }

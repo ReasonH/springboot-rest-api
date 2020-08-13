@@ -1,6 +1,8 @@
 package com.reason.restapi.events;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.reason.restapi.accounts.Account;
+import com.reason.restapi.accounts.AccountSerializer;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,7 +35,8 @@ public class Event {
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT; // 기본적으로 DRAFT로 생성
     @ManyToOne
-    private Account manager;
+    @JsonSerialize(using = AccountSerializer.class)
+    private Account manager; // 이벤트 조회에서 account 정보가 구체적으로 들어갈 필요가 없음
 
     public void update() {
         this.free = this.basePrice == 0 && this.maxPrice == 0;
