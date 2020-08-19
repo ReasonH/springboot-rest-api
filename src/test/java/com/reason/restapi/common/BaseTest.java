@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @Import(RestDocsConfiguration.class) // bean 설정 주입
 @ActiveProfiles("test") // application-test.properties 사용
 @Disabled
-public class BaseControllerTest {
+public class BaseTest {
 
     @Autowired
     protected MockMvc mockMvc;

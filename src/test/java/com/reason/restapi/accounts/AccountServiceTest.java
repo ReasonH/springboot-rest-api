@@ -1,5 +1,6 @@
 package com.reason.restapi.accounts;
 
+import com.reason.restapi.common.BaseTest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,10 +19,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith({SpringExtension.class})
-@SpringBootTest
-@ActiveProfiles("test")
-class AccountServiceTest {
+class AccountServiceTest extends BaseTest {
     @Autowired
     AccountService accountService;
 
