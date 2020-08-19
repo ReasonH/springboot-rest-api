@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-@AuthenticationPrincipal(expression = "#this == 'anonymousUser'? null : account")
+@AuthenticationPrincipal(expression = "#this == 'anonymousUser'? null : account") // getPrincipal()로 찾을 객체를 바로 주입받을 수 있음
 public @interface CurrentUser {
 }
